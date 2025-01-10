@@ -7,6 +7,25 @@
 #include "proc.h"
 #include "elf.h"
 
+
+
+// Zad 1
+// vmprint - funkcja wypisująca tabelę stronicowania
+void vmprint(pde_t *pgdir) {
+  cprintf("pgdir 0x%x:\n", pgdir);
+  for (int i = 0; i < NPDENTRIES/2; i++) {
+    if (pgdir[i] & PTE_P) {
+      pde_t *pgtab = (pte_t*)P2V(PTE_ADDR(pgdir[i]));
+      cprintf(".. %d: pde: 0x%x, pa: 0x%x\n", i, pgdir[i], pgtab);
+      for (int j = 0; j < NPTENTRIES; j++) {
+        if (pgtab[j] & PTE_P) {
+          cprintf(".. .. %d: pte: 0x%x, pa: 0x%x\n", j, pgtab[j], P2V(PTE_ADDR(pgtab[j])));
+        }
+      }
+    }
+  }
+}
+
 extern char data[];  // defined by kernel.ld
 pde_t *kpgdir;  // for use in scheduler()
 

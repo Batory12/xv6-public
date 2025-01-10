@@ -184,6 +184,7 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_expr\
+	_testvm\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -257,6 +258,7 @@ EXTRA=\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 	expr.c\
+	testvm.c\
 
 dist:
 	rm -rf dist

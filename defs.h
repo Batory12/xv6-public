@@ -170,6 +170,10 @@ void            uartinit(void);
 void            uartintr(void);
 void            uartputc(int);
 
+
+// vm.c - zad 1
+void            vmprint(pde_t *pgdir);
+
 // vm.c
 void            seginit(void);
 void            kvmalloc(void);
