@@ -73,6 +73,27 @@ walkpgdir(pde_t *pgdir, const void *va, int alloc)
   return &pgtab[PTX(va)];
 }
 
+// Zad 2 - syscalle
+
+int
+sys_usedvp(void)
+{
+  return myproc()->sz/PGSIZE;
+}
+
+int
+sys_usedpp(void)
+{
+  struct proc *p =  myproc();
+  int pages = 0;
+  for(int i = 0; i < p->sz; i+=PGSIZE){
+    if(walkpgdir(p->pgdir, (void *) i, 0) != 0) {
+      pages++;
+    }
+  }
+  return pages;
+}
+
 // Create PTEs for virtual addresses starting at va that refer to
 // physical addresses starting at pa. va and size might not
 // be page-aligned.

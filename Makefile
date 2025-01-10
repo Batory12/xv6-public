@@ -185,6 +185,7 @@ UPROGS=\
 	_zombie\
 	_expr\
 	_testvm\
+	_vmsyscalltest\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -259,6 +260,7 @@ EXTRA=\
 	.gdbinit.tmpl gdbutil\
 	expr.c\
 	testvm.c\
+	_vmsyscalltest.c\
 
 dist:
 	rm -rf dist
