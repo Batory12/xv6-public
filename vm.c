@@ -15,7 +15,7 @@ void vmprint(pde_t *pgdir) {
   cprintf("pgdir 0x%x:\n", pgdir);
   for (int i = 0; i < NPDENTRIES/2; i++) {
     if (pgdir[i] & PTE_P) {
-      pde_t *pgtab = (pte_t*)P2V(PTE_ADDR(pgdir[i]));
+      pde_t *pgtab = (pde_t*)P2V(PTE_ADDR(pgdir[i]));
       cprintf(".. %d: pde: 0x%x, pa: 0x%x\n", i, pgdir[i], pgtab);
       for (int j = 0; j < NPTENTRIES; j++) {
         if (pgtab[j] & PTE_P) {
@@ -74,11 +74,12 @@ walkpgdir(pde_t *pgdir, const void *va, int alloc)
 }
 
 // Zad 2 - syscalle
-
+// 
 int
 sys_usedvp(void)
 {
-  return myproc()->sz/PGSIZE;
+  // Odejmujemy guard page, bo nie jest w przestrzeni użytkownika
+  return PGROUNDUP(myproc()->sz)/PGSIZE - 1;
 }
 
 int
@@ -86,8 +87,9 @@ sys_usedpp(void)
 {
   struct proc *p =  myproc();
   int pages = 0;
-  for(int i = 0; i < p->sz; i+=PGSIZE){
-    if(walkpgdir(p->pgdir, (void *) i, 0) != 0) {
+  pte_t *pte;
+  for(int i = 0; i <= p->sz; i+=PGSIZE){
+    if((pte=walkpgdir(p->pgdir, (void *) i, 0)) != 0 && *pte & PTE_P && *pte & PTE_U) {
       pages++;
     }
   }
