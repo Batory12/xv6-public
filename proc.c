@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include"processInfo.h"
 
 struct {
   struct spinlock lock;
@@ -88,7 +89,7 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
-
+  p->switches = 0;
   release(&ptable.lock);
 
   // Allocate kernel stack.
@@ -343,7 +344,7 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
-
+      p->switches++;
       swtch(&(c->scheduler), p->context);
       switchkvm();
 
@@ -532,4 +533,52 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+int getNumProc(void) 
+{
+  acquire(&ptable.lock);
+  struct proc *p;
+  int proc_no = 0;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) 
+    if(p->state != UNUSED)
+      proc_no++;
+  release(&ptable.lock);
+  return proc_no;
+}
+
+int getMaxPid(void)
+{
+  acquire(&ptable.lock);
+  struct proc *p;
+  int max_pid  = 0;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) 
+   max_pid = p->pid > max_pid ? p->pid : max_pid;
+  release(&ptable.lock);
+  return max_pid;
+}
+
+int 
+getProcInfo(int pid, struct processInfo* info) {
+  acquire(&ptable.lock);
+  struct proc *p;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++) {
+   if(p->pid == pid) {
+      if(p->parent)
+        info->ppid = p->parent->pid;
+      else
+        info->ppid = 0;
+      info->sch_switches = p->switches;
+      info->size = p->sz;
+
+      safestrcpy(info->name, p->name, strlen(p->name)+1);
+      release(&ptable.lock);
+      return 0;
+   }
+  }
+  release(&ptable.lock);
+  return -1;
+
+  
+
 }

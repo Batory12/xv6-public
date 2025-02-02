@@ -4,6 +4,10 @@
         "mmu.h": "c",
         "x86.h": "c",
         "defs.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "user.h": "c",
+        "proc.h": "c",
+        "processinfo.h": "c",
+        "string.h": "c"
     }
 }

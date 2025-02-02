@@ -23,3 +23,8 @@
 // My syscalls
 #define SYS_usedvp 22
 #define SYS_usedpp 23
+
+// Lista 7
+#define SYS_getNumProc 24
+#define SYS_getMaxPid 25
+#define SYS_getProcInfo 26

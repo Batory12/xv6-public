@@ -107,6 +107,10 @@ extern int sys_uptime(void);
 extern int sys_usedvp(void);
 extern int sys_usedpp(void);
 
+extern int sys_getNumProc(void);
+extern int sys_getMaxPid(void);
+extern int sys_getProcInfo(void);
+
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
@@ -132,6 +136,9 @@ static int (*syscalls[])(void) = {
 // My syscalls
 [SYS_usedvp]  sys_usedvp,
 [SYS_usedpp]  sys_usedpp,
+[SYS_getNumProc] sys_getNumProc,
+[SYS_getMaxPid] sys_getMaxPid,
+[SYS_getProcInfo] sys_getProcInfo
 };
 
 void
