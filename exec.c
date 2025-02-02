@@ -101,8 +101,8 @@ exec(char *path, char **argv)
   curproc->tf->esp = sp;
   switchuvm(curproc);
   freevm(oldpgdir);
-  cprintf("exec - ");
-  vmprint(curproc->pgdir);
+  //cprintf("exec - ");
+  //vmprint(curproc->pgdir);
   return 0;
 
  bad:

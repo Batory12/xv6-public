@@ -8,6 +8,7 @@
         "user.h": "c",
         "proc.h": "c",
         "processinfo.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "stat.h": "c"
     }
 }

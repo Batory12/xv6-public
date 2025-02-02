@@ -90,6 +90,8 @@ found:
   p->state = EMBRYO;
   p->pid = nextpid++;
   p->switches = 0;
+  p->waiting=0;
+  p->prio = 500;
   release(&ptable.lock);
 
   // Allocate kernel stack.
@@ -261,8 +263,8 @@ exit(void)
         wakeup1(initproc);
     }
   }
-  cprintf("exit - ");
-  vmprint(curproc->pgdir);
+  // cprintf("exit - ");
+  // vmprint(curproc->pgdir);
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
   sched();
@@ -325,33 +327,45 @@ void
 scheduler(void)
 {
   struct proc *p;
+  struct proc *best_p;
   struct cpu *c = mycpu();
   c->proc = 0;
-  
+  // Zmieniamy algorytm:
+  // Bierzemy proces z największym prio+time_waiting*10
+  // W ten sposób długo czekające procesy w końcu dostaną czas procesora.
   for(;;){
     // Enable interrupts on this processor.
     sti();
-
+    best_p=0;
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
-
+      if(p->prio < (uint)~0)
+         p->waiting++;
+      if(best_p == 0 || (p->waiting>>22) + p->prio > (best_p->waiting>>22) + best_p->prio) {
+        best_p = p;
+      }
+    }
+    if(best_p == 0) {
+      release(&ptable.lock);
+      continue;
+    }
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
-      p->switches++;
-      swtch(&(c->scheduler), p->context);
+      c->proc = best_p;
+      switchuvm(best_p);
+      best_p->state = RUNNING;
+      best_p->switches++;
+      best_p->waiting=0;
+      swtch(&(c->scheduler), best_p->context);
       switchkvm();
 
       // Process is done running for now.
       // It should have changed its p->state before coming back.
       c->proc = 0;
-    }
     release(&ptable.lock);
 
   }

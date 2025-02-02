@@ -105,3 +105,15 @@ int sys_getProcInfo(void) {
     return -1;
   return getProcInfo(pid, info);
 }
+
+int sys_setprio(void) {
+  int prio;
+  if(argint(0, &prio) <0)
+    return -1;
+  myproc()->prio = prio;
+  return 0;
+}
+
+int sys_getprio(void) {
+  return myproc()->prio;
+}
