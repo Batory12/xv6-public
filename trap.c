@@ -45,6 +45,18 @@ trap(struct trapframe *tf)
       exit();
     return;
   }
+  if(tf->trapno == T_PGFLT) {
+    struct proc *curproc = myproc();
+    uint addr = rcr2();
+    if (allocuvm(curproc->pgdir, PGROUNDDOWN(addr), PGROUNDDOWN(addr) + PGSIZE) == 0 || addr >= curproc->sz) {
+      cprintf("Page fault! address 0x%x\n", addr);
+      curproc->killed = 1;
+      return;
+    }
+    switchuvm(curproc);
+    //vmprint(curproc->pgdir);
+    return;
+  }
 
   switch(tf->trapno){
   case T_IRQ0 + IRQ_TIMER:

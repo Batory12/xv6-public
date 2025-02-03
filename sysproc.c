@@ -140,6 +140,7 @@ int sys_mmap(void) {
   int n;
   if(argint(0, &n) < 0 || n % PGSIZE != 0)
     return 0;
+  int addr = myproc()->sz;
   myproc()->sz += n;
-  return myproc()->sz;
+  return addr;
 }
