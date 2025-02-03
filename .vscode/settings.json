@@ -9,6 +9,7 @@
         "proc.h": "c",
         "processinfo.h": "c",
         "string.h": "c",
-        "stat.h": "c"
+        "stat.h": "c",
+        "traps.h": "c"
     }
 }

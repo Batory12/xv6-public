@@ -32,3 +32,5 @@
 #define SYS_setprio 28
 #define SYS_forkcb 29
 #define SYS_exitcb 30
+
+#define SYS_mmap 31

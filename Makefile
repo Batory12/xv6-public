@@ -189,6 +189,7 @@ UPROGS=\
 	_ps\
 	_testsched\
 	_testcb\
+	_testmmap\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -267,6 +268,7 @@ EXTRA=\
 	ps.c\
 	testsched.c\
 	testcb.c\
+	testmmap.c\
 
 dist:
 	rm -rf dist

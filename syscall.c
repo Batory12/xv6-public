@@ -114,6 +114,7 @@ extern int sys_getprio(void);
 extern int sys_setprio(void);
 extern int sys_forkcb(void);
 extern int sys_exitcb(void);
+extern int sys_mmap(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -147,6 +148,7 @@ static int (*syscalls[])(void) = {
 [SYS_setprio] sys_setprio,
 [SYS_forkcb] sys_forkcb,
 [SYS_exitcb] sys_exitcb,
+[SYS_mmap] sys_mmap,
 };
 
 void

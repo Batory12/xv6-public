@@ -135,3 +135,11 @@ int sys_exitcb(void) {
   }
   return -1;
 }
+
+int sys_mmap(void) {
+  int n;
+  if(argint(0, &n) < 0 || n % PGSIZE != 0)
+    return 0;
+  myproc()->sz += n;
+  return myproc()->sz;
+}

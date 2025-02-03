@@ -49,3 +49,4 @@ void* memset(void*, int, uint);
 void* malloc(uint);
 void free(void*);
 int atoi(const char*);
+int mmap(uint); //Grow size by n bytes, n should by multiple of PGSIZE
