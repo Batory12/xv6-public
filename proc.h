@@ -36,6 +36,8 @@ enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 
 // Per-process state
 struct proc {
+  void (*cb)(void);             // callback 
+  void* cb_ret;                 //return address for callback
   uint prio;
   uint waiting;
   uint switches;                // Number of context switches

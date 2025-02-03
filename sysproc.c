@@ -117,3 +117,21 @@ int sys_setprio(void) {
 int sys_getprio(void) {
   return myproc()->prio;
 }
+
+int sys_forkcb(void) {
+  void (*func)(void);
+  if(argptr(0, (void*)&func, sizeof(func)) < 0)
+    return -1;
+  myproc()->cb = func;
+  return 0;
+}
+
+int sys_exitcb(void) {
+  struct proc *curproc = myproc();
+  if(curproc->cb_ret) {
+    curproc->tf->eip = curproc->cb_ret;
+    curproc->cb_ret = 0;
+    return 0;
+  }
+  return -1;
+}

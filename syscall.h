@@ -30,3 +30,5 @@
 #define SYS_getProcInfo 26
 #define SYS_getprio 27
 #define SYS_setprio 28
+#define SYS_forkcb 29
+#define SYS_exitcb 30

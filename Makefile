@@ -188,6 +188,7 @@ UPROGS=\
 	_vmsyscalltest\
 	_ps\
 	_testsched\
+	_testcb\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -265,6 +266,7 @@ EXTRA=\
 	vmsyscalltest.c\
 	ps.c\
 	testsched.c\
+	testcb.c\
 
 dist:
 	rm -rf dist

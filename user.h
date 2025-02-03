@@ -33,6 +33,9 @@ int getMaxPid(void);
 int getProcInfo(int, struct processInfo*);
 int getprio(void);
 int setprio(int);
+int forkcb(void (*func)(void));
+int exitcb(void);
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);
